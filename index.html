@@ -1,0 +1,981 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NOIRSHIFT — Luxury Streetwear</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --black: #0a0a0a;
+      --charcoal: #141414;
+      --slate: #1c1c1c;
+      --offwhite: #f4f1ed;
+      --muted: #9c9c9c;
+      --accent: #d6c9b3;
+      --glow: rgba(214, 201, 179, 0.22);
+      --glass: rgba(20, 20, 20, 0.75);
+      --shadow: 0 18px 45px rgba(0, 0, 0, 0.55);
+      --transition: 0.4s ease;
+      --radius: 18px;
+      font-size: 16px;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: "Inter", "Helvetica Neue", sans-serif;
+      background: var(--black);
+      color: var(--offwhite);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    img {
+      max-width: 100%;
+      display: block;
+    }
+
+    .container {
+      width: min(1200px, 90vw);
+      margin: 0 auto;
+    }
+
+    header {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      z-index: 1000;
+      background: rgba(10, 10, 10, 0.82);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.2rem 0;
+    }
+
+    .brand {
+      font-size: 1.4rem;
+      letter-spacing: 0.45rem;
+      font-weight: 700;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 1.5rem;
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.2rem;
+    }
+
+    .nav-actions {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+    }
+
+    .cart-button {
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      padding: 0.6rem 1.1rem;
+      border-radius: 999px;
+      background: transparent;
+      color: var(--offwhite);
+      cursor: pointer;
+      transition: var(--transition);
+      font-size: 0.8rem;
+      letter-spacing: 0.12rem;
+    }
+
+    .cart-button:hover {
+      border-color: var(--accent);
+      box-shadow: 0 0 25px var(--glow);
+    }
+
+    .hero {
+      min-height: 100vh;
+      display: grid;
+      align-items: center;
+      padding-top: 6rem;
+      background: radial-gradient(circle at top, rgba(214, 201, 179, 0.12), transparent 55%),
+        url("https://images.unsplash.com/photo-1521572267360-ee0c2909d518?auto=format&fit=crop&w=1600&q=80") center/cover;
+      position: relative;
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: rgba(7, 7, 7, 0.75);
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 1;
+      max-width: 540px;
+    }
+
+    .hero-title {
+      font-size: clamp(2.6rem, 5vw, 4.8rem);
+      text-transform: uppercase;
+      letter-spacing: 0.5rem;
+      font-weight: 800;
+      margin-bottom: 1rem;
+      overflow: hidden;
+    }
+
+    .hero-title span {
+      display: inline-block;
+      transform: translateY(120%);
+      animation: reveal 1.2s ease forwards;
+    }
+
+    .hero-title span:nth-child(2) {
+      animation-delay: 0.2s;
+    }
+
+    .hero-subtitle {
+      font-size: 1.1rem;
+      color: var(--muted);
+      margin-bottom: 2.5rem;
+    }
+
+    .cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 1rem;
+      border: 1px solid var(--accent);
+      padding: 0.9rem 2.2rem;
+      border-radius: 999px;
+      letter-spacing: 0.2rem;
+      text-transform: uppercase;
+      font-size: 0.8rem;
+      transition: var(--transition);
+      background: rgba(214, 201, 179, 0.08);
+    }
+
+    .cta:hover {
+      background: var(--accent);
+      color: #111;
+      box-shadow: 0 0 30px var(--glow);
+    }
+
+    section {
+      padding: 6rem 0;
+    }
+
+    .section-title {
+      text-transform: uppercase;
+      letter-spacing: 0.3rem;
+      font-size: 0.85rem;
+      color: var(--accent);
+      margin-bottom: 1.2rem;
+    }
+
+    .section-heading {
+      font-size: clamp(2rem, 4vw, 3.4rem);
+      font-weight: 700;
+      margin-bottom: 2.5rem;
+    }
+
+    .filters {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 2.5rem;
+    }
+
+    .filter-group {
+      background: var(--slate);
+      border-radius: var(--radius);
+      padding: 1.2rem;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .filter-group label {
+      font-size: 0.75rem;
+      letter-spacing: 0.18rem;
+      text-transform: uppercase;
+      color: var(--muted);
+      display: block;
+      margin-bottom: 0.8rem;
+    }
+
+    .filter-group select,
+    .filter-group input[type="range"] {
+      width: 100%;
+      background: transparent;
+      color: var(--offwhite);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 999px;
+      padding: 0.4rem 0.8rem;
+      font-size: 0.9rem;
+    }
+
+    .range-value {
+      margin-top: 0.6rem;
+      font-size: 0.85rem;
+      color: var(--muted);
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 2rem;
+    }
+
+    .card {
+      background: var(--charcoal);
+      border-radius: var(--radius);
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, 0.04);
+      transition: transform 0.4s ease, box-shadow 0.4s ease;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      min-height: 100%;
+    }
+
+    .card:hover {
+      transform: translateY(-8px);
+      box-shadow: var(--shadow);
+    }
+
+    .card img {
+      height: 240px;
+      object-fit: cover;
+    }
+
+    .card-content {
+      padding: 1.4rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+    }
+
+    .card-title {
+      font-size: 1.1rem;
+      font-weight: 600;
+    }
+
+    .card-meta {
+      font-size: 0.85rem;
+      color: var(--muted);
+    }
+
+    .price {
+      font-size: 1rem;
+      letter-spacing: 0.1rem;
+    }
+
+    .about {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 3rem;
+      align-items: center;
+    }
+
+    .about p {
+      color: var(--muted);
+      margin-bottom: 1rem;
+    }
+
+    .about-panel {
+      background: var(--slate);
+      padding: 2rem;
+      border-radius: var(--radius);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .contact-form {
+      background: var(--slate);
+      padding: 2rem;
+      border-radius: var(--radius);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      display: grid;
+      gap: 1.2rem;
+    }
+
+    .contact-form input,
+    .contact-form textarea {
+      background: #0f0f0f;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      padding: 0.9rem 1rem;
+      border-radius: 12px;
+      color: var(--offwhite);
+      font-size: 0.95rem;
+      transition: var(--transition);
+    }
+
+    .contact-form input:focus,
+    .contact-form textarea:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 18px rgba(214, 201, 179, 0.3);
+    }
+
+    .contact-form button {
+      background: var(--accent);
+      color: #111;
+      border: none;
+      padding: 0.9rem 1.6rem;
+      border-radius: 999px;
+      letter-spacing: 0.2rem;
+      text-transform: uppercase;
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .contact-form button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 0 20px var(--glow);
+    }
+
+    .form-success {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: var(--transition);
+      color: var(--accent);
+      font-size: 0.9rem;
+    }
+
+    .form-success.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    footer {
+      padding: 3rem 0;
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+      color: var(--muted);
+      text-align: center;
+      font-size: 0.85rem;
+    }
+
+    .socials {
+      display: flex;
+      justify-content: center;
+      gap: 1.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .socials a {
+      padding: 0.6rem;
+      border-radius: 50%;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      transition: var(--transition);
+    }
+
+    .socials a:hover {
+      border-color: var(--accent);
+      box-shadow: 0 0 20px var(--glow);
+    }
+
+    .modal,
+    .cart-panel {
+      position: fixed;
+      top: 0;
+      height: 100vh;
+      width: 100%;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 2000;
+    }
+
+    .modal.active {
+      display: flex;
+      background: rgba(0, 0, 0, 0.65);
+    }
+
+    .modal-content {
+      background: var(--charcoal);
+      border-radius: var(--radius);
+      width: min(900px, 92vw);
+      padding: 2rem;
+      box-shadow: var(--shadow);
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 2rem;
+      position: relative;
+      animation: pop 0.5s ease;
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      background: transparent;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: var(--offwhite);
+      border-radius: 50%;
+      width: 36px;
+      height: 36px;
+      cursor: pointer;
+    }
+
+    .modal-images img {
+      border-radius: var(--radius);
+      margin-bottom: 1rem;
+    }
+
+    .modal-details h3 {
+      font-size: 1.8rem;
+      margin-bottom: 0.6rem;
+    }
+
+    .detail-list {
+      margin-top: 1rem;
+      display: grid;
+      gap: 0.6rem;
+      font-size: 0.9rem;
+      color: var(--muted);
+    }
+
+    .modal-details button {
+      margin-top: 1.6rem;
+      width: fit-content;
+      padding: 0.8rem 1.6rem;
+      border-radius: 999px;
+      border: 1px solid var(--accent);
+      background: transparent;
+      color: var(--offwhite);
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .modal-details button:hover {
+      background: var(--accent);
+      color: #111;
+    }
+
+    .cart-panel {
+      justify-content: flex-end;
+      background: rgba(0, 0, 0, 0.6);
+    }
+
+    .cart-panel.active {
+      display: flex;
+    }
+
+    .cart-content {
+      width: min(420px, 90vw);
+      height: 100vh;
+      background: var(--charcoal);
+      padding: 2rem 1.6rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+      box-shadow: var(--shadow);
+      animation: slideIn 0.45s ease;
+    }
+
+    .cart-items {
+      flex: 1;
+      overflow-y: auto;
+      display: grid;
+      gap: 1rem;
+    }
+
+    .cart-item {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+      background: #101010;
+      padding: 0.8rem;
+      border-radius: 12px;
+    }
+
+    .cart-item img {
+      width: 64px;
+      height: 64px;
+      object-fit: cover;
+      border-radius: 10px;
+    }
+
+    .cart-item button {
+      margin-left: auto;
+      border: none;
+      background: transparent;
+      color: var(--accent);
+      cursor: pointer;
+      font-size: 0.85rem;
+    }
+
+    .cart-total {
+      display: flex;
+      justify-content: space-between;
+      font-size: 1.1rem;
+      letter-spacing: 0.15rem;
+    }
+
+    .scroll-reveal {
+      opacity: 0;
+      transform: translateY(40px);
+      transition: 0.8s ease;
+    }
+
+    .scroll-reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    @keyframes reveal {
+      to {
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes pop {
+      from {
+        transform: scale(0.95);
+        opacity: 0;
+      }
+      to {
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
+
+    @keyframes slideIn {
+      from {
+        transform: translateX(100%);
+      }
+      to {
+        transform: translateX(0);
+      }
+    }
+
+    @media (max-width: 768px) {
+      .nav-links {
+        display: none;
+      }
+      .hero {
+        text-align: center;
+      }
+      .hero-content {
+        margin: 0 auto;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container nav">
+      <div class="brand">NOIRSHIFT</div>
+      <nav class="nav-links">
+        <a href="#collection">Collection</a>
+        <a href="#about">About</a>
+        <a href="#contact">Contact</a>
+      </nav>
+      <div class="nav-actions">
+        <button class="cart-button" id="openCart">Cart (<span id="cartCount">0</span>)</button>
+      </div>
+    </div>
+  </header>
+
+  <section class="hero" id="hero">
+    <div class="container hero-content">
+      <h1 class="hero-title">
+        <span>NOIR</span>
+        <span>SHIFT</span>
+      </h1>
+      <p class="hero-subtitle">Luxury streetwear engineered for the afterhours. Elevated silhouettes, weighty fabric, and editorial styling.</p>
+      <a class="cta" href="#collection">Shop Collection</a>
+    </div>
+  </section>
+
+  <section id="collection">
+    <div class="container scroll-reveal">
+      <p class="section-title">Collection</p>
+      <h2 class="section-heading">The Dark Essentials</h2>
+
+      <div class="filters">
+        <div class="filter-group">
+          <label for="categoryFilter">Category</label>
+          <select id="categoryFilter">
+            <option value="All">All</option>
+            <option value="Hoodies">Hoodies</option>
+            <option value="T-Shirts">T-Shirts</option>
+            <option value="Jackets">Jackets</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <label for="priceFilter">Max Price</label>
+          <input type="range" id="priceFilter" min="80" max="260" value="260" />
+          <div class="range-value" id="priceValue">Up to $260</div>
+        </div>
+        <div class="filter-group">
+          <label for="gsmFilter">Max GSM</label>
+          <input type="range" id="gsmFilter" min="300" max="450" value="450" />
+          <div class="range-value" id="gsmValue">Up to 450 GSM</div>
+        </div>
+      </div>
+
+      <div class="grid" id="productGrid"></div>
+    </div>
+  </section>
+
+  <section id="about">
+    <div class="container about scroll-reveal">
+      <div>
+        <p class="section-title">About Noirshift</p>
+        <h2 class="section-heading">Streetwear for the nocturnal elite.</h2>
+        <p>Noirshift blends underground culture with atelier-level craftsmanship. Each drop is built on weight, structure, and minimal detail that feels effortless but rare.</p>
+        <p>Our mission is to craft garments that feel cinematic — silhouettes that move with your night, fabrics that hold their shape, and palettes that stay forever dark.</p>
+      </div>
+      <div class="about-panel">
+        <h3>Mission & Philosophy</h3>
+        <p>We design for those who treat the city as their runway. Every piece is cut for movement, finished with luxury-grade textiles, and produced in small batches.</p>
+        <p>Intentional, minimal, timeless — Noirshift is for those who leave a whisper, not a trace.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="contact">
+    <div class="container scroll-reveal">
+      <p class="section-title">Contact</p>
+      <h2 class="section-heading">Let’s build your next look.</h2>
+      <form class="contact-form" id="contactForm">
+        <input type="text" id="name" placeholder="Full Name" required />
+        <input type="email" id="email" placeholder="Email Address" required />
+        <textarea id="message" rows="4" placeholder="Tell us about your vision" required></textarea>
+        <button type="submit">Send Message</button>
+        <div class="form-success" id="formSuccess">Your message has been sent. We'll be in touch shortly.</div>
+      </form>
+    </div>
+  </section>
+
+  <footer>
+    <div class="socials">
+      <a href="#">IG</a>
+      <a href="#">FB</a>
+      <a href="#">YT</a>
+    </div>
+    <p>NOIRSHIFT — Silence the noise. Elevate the night.</p>
+    <p>© 2024 Noirshift Atelier. All rights reserved.</p>
+  </footer>
+
+  <div class="modal" id="productModal">
+    <div class="modal-content">
+      <button class="modal-close" id="closeModal">×</button>
+      <div class="modal-images" id="modalImages"></div>
+      <div class="modal-details" id="modalDetails"></div>
+    </div>
+  </div>
+
+  <div class="cart-panel" id="cartPanel">
+    <div class="cart-content">
+      <div style="display: flex; justify-content: space-between; align-items: center;">
+        <h3>Cart</h3>
+        <button class="modal-close" id="closeCart">×</button>
+      </div>
+      <div class="cart-items" id="cartItems"></div>
+      <div class="cart-total">
+        <span>Total</span>
+        <span id="cartTotal">$0</span>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const products = [
+      {
+        id: 1,
+        name: "Nightfall Hoodie",
+        category: "Hoodies",
+        price: 180,
+        gsm: 420,
+        description: "Oversized hoodie with structured shoulders and brushed interior for a luxe drape.",
+        fabric: "100% organic cotton fleece",
+        images: [
+          "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?auto=format&fit=crop&w=900&q=80",
+          "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=900&q=80"
+        ]
+      },
+      {
+        id: 2,
+        name: "Obsidian Zip Jacket",
+        category: "Jackets",
+        price: 240,
+        gsm: 360,
+        description: "Lightweight technical shell with matte finish and oversized collar.",
+        fabric: "Water-resistant nylon blend",
+        images: [
+          "https://images.unsplash.com/photo-1529139574466-a303027c1d8b?auto=format&fit=crop&w=900&q=80",
+          "https://images.unsplash.com/photo-1503342217505-b0a15ec3261c?auto=format&fit=crop&w=900&q=80"
+        ]
+      },
+      {
+        id: 3,
+        name: "Midnight Tee",
+        category: "T-Shirts",
+        price: 95,
+        gsm: 300,
+        description: "Boxy tee with premium weight and tonal embroidery.",
+        fabric: "300 GSM heavyweight cotton",
+        images: [
+          "https://images.unsplash.com/photo-1489987707025-afc232f7ea0f?auto=format&fit=crop&w=900&q=80",
+          "https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=900&q=80"
+        ]
+      },
+      {
+        id: 4,
+        name: "Ashen Utility Jacket",
+        category: "Jackets",
+        price: 260,
+        gsm: 410,
+        description: "Structured utility jacket with layered pocket system.",
+        fabric: "Cotton twill with satin lining",
+        images: [
+          "https://images.unsplash.com/photo-1487222477894-8943e31ef7b2?auto=format&fit=crop&w=900&q=80",
+          "https://images.unsplash.com/photo-1521575107034-e0fa0b594529?auto=format&fit=crop&w=900&q=80"
+        ]
+      },
+      {
+        id: 5,
+        name: "Phantom Oversized Tee",
+        category: "T-Shirts",
+        price: 110,
+        gsm: 350,
+        description: "Dropped shoulder silhouette with double-stitched hems.",
+        fabric: "350 GSM combed cotton",
+        images: [
+          "https://images.unsplash.com/photo-1520975682031-a6b290f3c947?auto=format&fit=crop&w=900&q=80",
+          "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=900&q=80"
+        ]
+      },
+      {
+        id: 6,
+        name: "Eclipse Panel Hoodie",
+        category: "Hoodies",
+        price: 195,
+        gsm: 450,
+        description: "Signature panel hoodie with high collar and heavyweight fleece.",
+        fabric: "450 GSM brushed terry",
+        images: [
+          "https://images.unsplash.com/photo-1503342217505-b0a15ec3261c?auto=format&fit=crop&w=900&q=80",
+          "https://images.unsplash.com/photo-1463107971871-fbac9ddb920f?auto=format&fit=crop&w=900&q=80"
+        ]
+      }
+    ];
+
+    const productGrid = document.getElementById("productGrid");
+    const categoryFilter = document.getElementById("categoryFilter");
+    const priceFilter = document.getElementById("priceFilter");
+    const gsmFilter = document.getElementById("gsmFilter");
+    const priceValue = document.getElementById("priceValue");
+    const gsmValue = document.getElementById("gsmValue");
+    const modal = document.getElementById("productModal");
+    const modalImages = document.getElementById("modalImages");
+    const modalDetails = document.getElementById("modalDetails");
+    const closeModal = document.getElementById("closeModal");
+    const cartPanel = document.getElementById("cartPanel");
+    const openCart = document.getElementById("openCart");
+    const closeCart = document.getElementById("closeCart");
+    const cartItemsContainer = document.getElementById("cartItems");
+    const cartTotal = document.getElementById("cartTotal");
+    const cartCount = document.getElementById("cartCount");
+
+    let cart = JSON.parse(localStorage.getItem("noirshift-cart")) || [];
+
+    const renderProducts = () => {
+      const maxPrice = Number(priceFilter.value);
+      const maxGsm = Number(gsmFilter.value);
+      const category = categoryFilter.value;
+
+      const filtered = products.filter((product) => {
+        const matchesCategory = category === "All" || product.category === category;
+        return product.price <= maxPrice && product.gsm <= maxGsm && matchesCategory;
+      });
+
+      productGrid.innerHTML = filtered
+        .map(
+          (product) => `
+            <article class="card" data-id="${product.id}">
+              <img src="${product.images[0]}" alt="${product.name}" loading="lazy" />
+              <div class="card-content">
+                <h3 class="card-title">${product.name}</h3>
+                <p class="card-meta">${product.category} · ${product.gsm} GSM</p>
+                <p class="price">$${product.price}</p>
+              </div>
+            </article>
+          `
+        )
+        .join("");
+    };
+
+    const openProductModal = (product) => {
+      modalImages.innerHTML = product.images
+        .map((image) => `<img src="${image}" alt="${product.name}" loading="lazy" />`)
+        .join("");
+
+      modalDetails.innerHTML = `
+        <h3>${product.name}</h3>
+        <p>${product.description}</p>
+        <div class="detail-list">
+          <span>Category: ${product.category}</span>
+          <span>Fabric: ${product.fabric}</span>
+          <span>Weight: ${product.gsm} GSM</span>
+          <span>Price: $${product.price}</span>
+        </div>
+        <button data-id="${product.id}">Add to Cart</button>
+      `;
+
+      modal.classList.add("active");
+    };
+
+    const closeProductModal = () => {
+      modal.classList.remove("active");
+    };
+
+    const updateCartStorage = () => {
+      localStorage.setItem("noirshift-cart", JSON.stringify(cart));
+    };
+
+    const renderCart = () => {
+      cartItemsContainer.innerHTML = cart
+        .map(
+          (item) => `
+          <div class="cart-item">
+            <img src="${item.images[0]}" alt="${item.name}" loading="lazy" />
+            <div>
+              <div>${item.name}</div>
+              <div class="card-meta">$${item.price}</div>
+            </div>
+            <button data-id="${item.id}">Remove</button>
+          </div>
+        `
+        )
+        .join("");
+
+      const total = cart.reduce((sum, item) => sum + item.price, 0);
+      cartTotal.textContent = `$${total}`;
+      cartCount.textContent = cart.length;
+      updateCartStorage();
+    };
+
+    const addToCart = (productId) => {
+      const product = products.find((item) => item.id === productId);
+      if (product) {
+        cart.push(product);
+        renderCart();
+      }
+    };
+
+    const removeFromCart = (productId) => {
+      cart = cart.filter((item) => item.id !== productId);
+      renderCart();
+    };
+
+    const handleProductClick = (event) => {
+      const card = event.target.closest(".card");
+      if (!card) return;
+      const productId = Number(card.dataset.id);
+      const product = products.find((item) => item.id === productId);
+      if (product) {
+        openProductModal(product);
+      }
+    };
+
+    productGrid.addEventListener("click", handleProductClick);
+
+    modal.addEventListener("click", (event) => {
+      if (event.target === modal) {
+        closeProductModal();
+      }
+    });
+
+    closeModal.addEventListener("click", closeProductModal);
+
+    modalDetails.addEventListener("click", (event) => {
+      if (event.target.tagName === "BUTTON") {
+        const productId = Number(event.target.dataset.id);
+        addToCart(productId);
+      }
+    });
+
+    cartItemsContainer.addEventListener("click", (event) => {
+      if (event.target.tagName === "BUTTON") {
+        removeFromCart(Number(event.target.dataset.id));
+      }
+    });
+
+    openCart.addEventListener("click", () => {
+      cartPanel.classList.add("active");
+    });
+
+    closeCart.addEventListener("click", () => {
+      cartPanel.classList.remove("active");
+    });
+
+    cartPanel.addEventListener("click", (event) => {
+      if (event.target === cartPanel) {
+        cartPanel.classList.remove("active");
+      }
+    });
+
+    const updateFilterValues = () => {
+      priceValue.textContent = `Up to $${priceFilter.value}`;
+      gsmValue.textContent = `Up to ${gsmFilter.value} GSM`;
+    };
+
+    [categoryFilter, priceFilter, gsmFilter].forEach((filter) => {
+      filter.addEventListener("input", () => {
+        updateFilterValues();
+        renderProducts();
+      });
+    });
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("visible");
+          }
+        });
+      },
+      { threshold: 0.15 }
+    );
+
+    document.querySelectorAll(".scroll-reveal").forEach((el) => observer.observe(el));
+
+    const contactForm = document.getElementById("contactForm");
+    const formSuccess = document.getElementById("formSuccess");
+
+    contactForm.addEventListener("submit", (event) => {
+      event.preventDefault();
+      const name = document.getElementById("name").value.trim();
+      const email = document.getElementById("email").value.trim();
+      const message = document.getElementById("message").value.trim();
+
+      if (!name || !email || !message || !email.includes("@")) {
+        formSuccess.textContent = "Please complete all fields with a valid email.";
+        formSuccess.classList.add("show");
+        return;
+      }
+
+      formSuccess.textContent = "Your message has been sent. We'll be in touch shortly.";
+      formSuccess.classList.add("show");
+      contactForm.reset();
+    });
+
+    updateFilterValues();
+    renderProducts();
+    renderCart();
+  </script>
+</body>
+</html>
